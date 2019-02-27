@@ -1,5 +1,7 @@
 export const gigasecond = (utcDate) => {
+  const GIGASECOND = 10 ** 9;
+  const MILLISECOND = 10 ** 3;
   const past = Date.parse(utcDate);
-  const future = (past / 1000) + 1000000000;
-  return new Date(future * 1000);
+  const future = (past / MILLISECOND) + GIGASECOND;
+  return new Date(future * MILLISECOND);
 };
