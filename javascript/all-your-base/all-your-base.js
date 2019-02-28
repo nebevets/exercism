@@ -10,14 +10,14 @@ export const convert = (array, fromBase, toBase) => {
     if (array.length > 1 && array[0] === 0)
         throw new Error('Input has wrong format');
     
-    let arrayLength = array.length - 1;
+    let lastArrayIndex = array.length - 1;
     let number = null;
     const result = [];
 
-    for (let index = 0; index < array.length; index++, arrayLength--) {
+    for (let index = 0; index < array.length; index++, lastArrayIndex--) {
         if (array[index] < 0 || array[index] >= fromBase)
             throw new Error('Input has wrong format');
-        number += array[index] * (fromBase**arrayLength);
+        number += array[index] * (fromBase**lastArrayIndex);
     }
 
     let power = 0;
@@ -29,8 +29,8 @@ export const convert = (array, fromBase, toBase) => {
     
     while (power > 0) {
         --power;
-        let quotient = Math.floor(number/(toBase**power));
-        let remainder = number % (toBase**power);
+        const quotient = Math.floor(number/(toBase**power));
+        const remainder = number % (toBase**power);
         result.push(quotient);
         number = remainder;
     }
