@@ -1,29 +1,41 @@
-export const convert = (array, fromBase, toBase) => {
-  if (fromBase <= 1 || toBase <= 1) {
-    throw new Error(`Wrong ${fromBase <= 1 ? 'input' : 'output'} base`);
-  }
-  if (parseInt(fromBase, 10) !== fromBase || parseInt(toBase, 10) !== toBase) {
-    throw new Error(`Wrong ${parseInt(fromBase, 10) !== fromBase ? 'input' : 'output'} base`);
-  }
-  if (!fromBase || !toBase) {
-    throw new Error(`Wrong ${!fromBase ? 'input' : 'output'} base`);
-  }
-  if (fromBase === toBase) {
-    return array;
-  }
+function validateDigits(array, base) {
   if (array.length === 0) {
     throw new Error('Input has wrong format');
   }
   if (array.length > 1 && array[0] === 0) {
     throw new Error('Input has wrong format');
   }
+  array.map((number) => {
+    if (number < 0 || number >= base) {
+      throw new Error('Input has wrong format');
+    }
+    return true;
+  });
+}
+
+function validateBase(base, baseType) {
+  if (base <= 1) {
+    throw new Error(`Wrong ${baseType} base`);
+  }
+  if (parseInt(base, 10) !== base) {
+    throw new Error(`Wrong ${baseType} base`);
+  }
+  if (!base) {
+    throw new Error(`Wrong ${baseType} base`);
+  }
+}
+
+export const convert = (array, fromBase, toBase) => {
+  validateBase(fromBase, 'input');
+  validateBase(toBase, 'output');
+  if (fromBase === toBase) {
+    return array;
+  }
+  validateDigits(array, fromBase);
   let lastArrayIndex = array.length - 1;
   let number = null;
   const result = [];
   for (let index = 0; index < array.length; index += 1, lastArrayIndex -= 1) {
-    if (array[index] < 0 || array[index] >= fromBase) {
-      throw new Error('Input has wrong format');
-    }
     number += array[index] * (fromBase ** lastArrayIndex);
   }
   let power = 0;
@@ -41,3 +53,10 @@ export const convert = (array, fromBase, toBase) => {
   }
   return result;
 };
+
+/*
+  You would make three calls, one to validateDigits and
+  two to validateBase, once for each base. This will remove
+  all the duplication you currently have. You would also be
+  able to remove the conditional on line 18-19.
+*/
