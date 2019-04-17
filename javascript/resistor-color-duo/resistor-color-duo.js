@@ -13,4 +13,4 @@ export const COLORS = [
 
 export const value = array => array
   .map(color => COLORS.indexOf(color.toLowerCase()))
-  .reduce((total, item) => (total * 10) + item );
+  .reduce((total, item) => (total * 10) + item, 0);
