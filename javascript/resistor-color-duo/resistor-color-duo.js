@@ -11,7 +11,6 @@ export const COLORS = [
   'white',
 ];
 
-export const value = array => Number(array
+export const value = array => array
   .map(color => COLORS.indexOf(color.toLowerCase()))
-  .join('')
-);
+  .reduce((total, item) => (total * 10) + item );
