@@ -1,8 +1,10 @@
+'use strict';
+
 export class LinkedList {
-  constructor(){
+  constructor() {
     this.head = null;
   }
-  createNode(value=null, prev=null, next=null){
+  createNode(value=null, prev=null, next=null) {
     return {
       next,
       prev,
@@ -55,15 +57,34 @@ export class LinkedList {
     if(!this.head){
       this.head = this.createNode(value);
       return;
-    }else{
-      const node = this.createNode(value, null, this.head);
-      this.head.prev = node;
-      this.head = node;
     }
+    const node = this.createNode(value, null, this.head);
+    this.head.prev = node;
+    this.head = node;
   }
 
-  delete() {
-    throw new Error("Remove this statement and implement this function");
+  delete(value) {
+    if(this.head){
+      let pointer = this.head;
+      while(pointer.value !== value && pointer.next !== null){
+        pointer = pointer.next;
+      }
+      if(pointer.value === value){
+        const newPrev = pointer.prev;
+        const newNext = pointer.next;
+        if(newPrev && newNext){
+          newPrev.next = newNext;
+          newNext.prev = newPrev;
+        }else if (!newPrev && newNext){
+          this.head = newNext;
+          this.head.prev = null;
+        }else if(newPrev && !newNext){
+          newPrev.next = null;
+        }else {
+          this.head = null;
+        }
+      }
+    }
   }
 
   count() {
