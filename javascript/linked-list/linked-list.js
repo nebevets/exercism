@@ -1,71 +1,65 @@
 export class LinkedList {
   constructor(){
-    this.list = {
-        value: null,
-        next: null,
-        prev: null
-    }
+    this.head = null;
+  }
+  createNode(value=null, prev=null, next=null){
+    return {
+      next,
+      prev,
+      value
+    };
   }
   push(value) {
-    if(!this.list.value){
-      this.list.value = value;
+    if(!this.head){
+      this.head = this.createNode(value);
       return;
     }
-    let pointer = this.list;
+    let pointer = this.head;
     while(pointer.next){
         pointer = pointer.next;
     }
-    pointer.next = {
-        value,
-        next: null,
-        prev: pointer
-    };
+    pointer.next = this.createNode(value, pointer);
   }
 
   pop() {
-    if(!this.list.next){
-      if(this.list.value){
-        const result = this.list.value;
-        this.list.value = null;
-        return result;
-      }
+    if(!this.head){
       return null;
     }
-    let pointer = this.list;
+    let pointer = this.head;
     while(pointer.next){
       pointer = pointer.next;
     }
-    pointer.prev.next = null;
+    if(pointer.prev){
+        pointer.prev.next = null;
+    }else{
+        this.head = null;
+    }
     return pointer.value;
   }
 
   shift() {
-    const {value, next} = this.list;
-    this.list = {...next};
+    if(!this.head){
+      return null;
+    }
+    const {value} = this.head;
+    if(this.head.next){
+      this.head.next.prev = null;
+      this.head = this.head.next;
+    }else{
+      this.head = null;
+    }
     return value;
   }
 
   unshift(value) {
-    if(!this.list.value){
-      this.list.value = value;
+    if(!this.head){
+      this.head = this.createNode(value);
       return;
+    }else{
+      const node = this.createNode(value, null, this.head);
+      this.head.prev = node;
+      this.head = node;
     }
-    if(!this.list.next){
-      const node = {
-        prev: null,
-        next: this.list,
-        value
-      };
-      this.list = node;
-      return;
-    }
-    const {...next} = this.list;
-    const newList = {
-      prev: null,
-      next,
-      value
-    };
-    this.list = newList;
   }
 
   delete() {
@@ -73,11 +67,11 @@ export class LinkedList {
   }
 
   count() {
-    if(!this.list.value){
+    if(!this.head){
       return 0;
     }
     let count = 1;
-    let pointer = this.list;
+    let pointer = this.head;
     while(pointer.next){
       pointer = pointer.next;
       count++;
