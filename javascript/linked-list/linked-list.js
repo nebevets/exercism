@@ -83,14 +83,18 @@ export class LinkedList {
         if(newPrev && newNext){
           newPrev.next = newNext;
           newNext.prev = newPrev;
-        }else if (!newPrev && newNext){
+          return;
+        }
+        if(!newPrev && newNext){
           this.head = newNext;
           this.head.prev = null;
-        }else if(newPrev && !newNext){
-          newPrev.next = null;
-        }else {
-          this.head = null;
+          return;
         }
+        if(newPrev && !newNext){
+          newPrev.next = null;
+          return;
+        }
+        this.head = null;
       }
     }
   }
