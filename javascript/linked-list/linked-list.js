@@ -3,7 +3,9 @@
 export class LinkedList {
   constructor() {
     this.head = null;
+    this.length = 0;
   }
+
   createNode(value=null, prev=null, next=null) {
     return {
       next,
@@ -11,7 +13,9 @@ export class LinkedList {
       value
     };
   }
+
   push(value) {
+    this.length++;
     if(!this.head){
       this.head = this.createNode(value);
       return;
@@ -36,6 +40,7 @@ export class LinkedList {
     }else{
         this.head = null;
     }
+    this.length--;
     return pointer.value;
   }
 
@@ -50,10 +55,12 @@ export class LinkedList {
     }else{
       this.head = null;
     }
+    this.length--;
     return value;
   }
 
   unshift(value) {
+    this.length++;
     if(!this.head){
       this.head = this.createNode(value);
       return;
@@ -70,6 +77,7 @@ export class LinkedList {
         pointer = pointer.next;
       }
       if(pointer.value === value){
+        this.length--;
         const newPrev = pointer.prev;
         const newNext = pointer.next;
         if(newPrev && newNext){
@@ -88,15 +96,6 @@ export class LinkedList {
   }
 
   count() {
-    if(!this.head){
-      return 0;
-    }
-    let count = 1;
-    let pointer = this.head;
-    while(pointer.next){
-      pointer = pointer.next;
-      count++;
-    }
-    return count;
+    return this.length;
   }
 }
