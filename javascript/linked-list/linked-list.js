@@ -71,6 +71,7 @@ export class LinkedList {
   }
 
   delete(value) {
+  /* only works for deletion of primitive data types */
     if(this.head){
       let pointer = this.head;
       while(pointer.value !== value && pointer.next !== null){
