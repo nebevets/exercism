@@ -3,7 +3,9 @@
 export class LinkedList {
   constructor() {
     this.head = null;
+    this.length = 0;
   }
+
   createNode(value=null, prev=null, next=null) {
     return {
       next,
@@ -11,7 +13,9 @@ export class LinkedList {
       value
     };
   }
+
   push(value) {
+    this.length++;
     if(!this.head){
       this.head = this.createNode(value);
       return;
@@ -36,6 +40,7 @@ export class LinkedList {
     }else{
         this.head = null;
     }
+    this.length--;
     return pointer.value;
   }
 
@@ -50,10 +55,12 @@ export class LinkedList {
     }else{
       this.head = null;
     }
+    this.length--;
     return value;
   }
 
   unshift(value) {
+    this.length++;
     if(!this.head){
       this.head = this.createNode(value);
       return;
@@ -64,39 +71,36 @@ export class LinkedList {
   }
 
   delete(value) {
+  /* only works for deletion of primitive data types */
     if(this.head){
       let pointer = this.head;
       while(pointer.value !== value && pointer.next !== null){
         pointer = pointer.next;
       }
       if(pointer.value === value){
+        this.length--;
         const newPrev = pointer.prev;
         const newNext = pointer.next;
         if(newPrev && newNext){
           newPrev.next = newNext;
           newNext.prev = newPrev;
-        }else if (!newPrev && newNext){
+          return;
+        }
+        if(!newPrev && newNext){
           this.head = newNext;
           this.head.prev = null;
-        }else if(newPrev && !newNext){
-          newPrev.next = null;
-        }else {
-          this.head = null;
+          return;
         }
+        if(newPrev && !newNext){
+          newPrev.next = null;
+          return;
+        }
+        this.head = null;
       }
     }
   }
 
   count() {
-    if(!this.head){
-      return 0;
-    }
-    let count = 1;
-    let pointer = this.head;
-    while(pointer.next){
-      pointer = pointer.next;
-      count++;
-    }
-    return count;
+    return this.length;
   }
 }
