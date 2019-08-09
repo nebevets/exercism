@@ -1,47 +1,46 @@
 'use strict';
 
+class Node {
+  constructor(value=null, prev=null, next=null) {
+    this.value = value;
+    this.prev = prev;
+    this.next = next;
+  }
+}
+
 export class LinkedList {
   constructor() {
     this.head = null;
+    this.tail = null;
     this.length = 0;
-  }
-
-  createNode(value=null, prev=null, next=null) {
-    return {
-      next,
-      prev,
-      value
-    };
   }
 
   push(value) {
     this.length++;
     if(!this.head){
-      this.head = this.createNode(value);
+      this.head = new Node(value);
+      this.tail = this.head;
       return;
     }
-    let pointer = this.head;
-    while(pointer.next){
-        pointer = pointer.next;
-    }
-    pointer.next = this.createNode(value, pointer);
+    this.tail.next = new Node(value, this.tail);
+    this.tail = this.tail.next;
   }
 
   pop() {
     if(!this.head){
       return null;
     }
-    let pointer = this.head;
-    while(pointer.next){
-      pointer = pointer.next;
-    }
+    const pointer = this.tail;
+    const {value} = this.tail;
     if(pointer.prev){
+        this.tail = pointer.prev;
         pointer.prev.next = null;
     }else{
         this.head = null;
+        this.tail = null;
     }
     this.length--;
-    return pointer.value;
+    return value;
   }
 
   shift() {
@@ -54,6 +53,7 @@ export class LinkedList {
       this.head = this.head.next;
     }else{
       this.head = null;
+      this.tail = null;
     }
     this.length--;
     return value;
@@ -62,10 +62,11 @@ export class LinkedList {
   unshift(value) {
     this.length++;
     if(!this.head){
-      this.head = this.createNode(value);
+      this.head = new Node(value);
+      this.tail = this.head;
       return;
     }
-    const node = this.createNode(value, null, this.head);
+    const node = new Node(value, null, this.head);
     this.head.prev = node;
     this.head = node;
   }
@@ -93,9 +94,11 @@ export class LinkedList {
         }
         if(newPrev && !newNext){
           newPrev.next = null;
+          this.tail = newPrev;
           return;
         }
         this.head = null;
+        this.tail = null;
       }
     }
   }
